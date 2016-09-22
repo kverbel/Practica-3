@@ -3,6 +3,7 @@ package com.arteaga.kevin.miscarnesparrilla;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,9 +32,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_perfil:
-                Intent intent=new Intent(this,PerfilActivity.class);
+                intent = new Intent(this,PerfilActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_comidas:
+                intent = new Intent(this,ComidasActivity.class);
                 startActivity(intent);
                 return true;
             default:

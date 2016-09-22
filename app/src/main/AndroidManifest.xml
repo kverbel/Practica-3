@@ -17,17 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"/>
         <activity
             android:name=".LogginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".RegistroActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".PerfilActivity"
-            android:label="Mi Perfil">
-        </activity>
+            android:label="Mi Perfil"></activity>
+        <activity
+            android:name=".ComidasActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

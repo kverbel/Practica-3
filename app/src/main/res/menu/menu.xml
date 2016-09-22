@@ -5,5 +5,11 @@
         android:id="@+id/action_perfil"
         android:title="Mi Perfil"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_comidas"
+        android:title="Comidas"
+        android:showAsAction="never">
+    </item>
+
 
 </menu>

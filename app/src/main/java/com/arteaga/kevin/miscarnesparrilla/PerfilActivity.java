@@ -2,6 +2,7 @@ package com.arteaga.kevin.miscarnesparrilla;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,8 +42,6 @@ public class PerfilActivity extends AppCompatActivity  {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_principal:
-                Intent intent=new Intent(this,MainActivity.class);
-                startActivity(intent);
                 finish();
                 return true;
             default:
