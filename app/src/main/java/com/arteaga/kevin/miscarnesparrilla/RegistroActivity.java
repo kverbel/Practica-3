@@ -1,6 +1,8 @@
 package com.arteaga.kevin.miscarnesparrilla;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 public class RegistroActivity extends AppCompatActivity {
 
     EditText usuario,contraseña,contraseña2,correo;
+    SharedPreferences MisCarnes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +22,14 @@ public class RegistroActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_registro);
+        MisCarnes = getSharedPreferences("MisPreferencias",MODE_PRIVATE);
         usuario=(EditText)findViewById(R.id.eUsuarioR);
         contraseña=(EditText)findViewById(R.id.eContraseñaR);
         contraseña2=(EditText)findViewById(R.id.eContraseñaR2);
         correo=(EditText)findViewById(R.id.eCorreo);
+
+
+
     }
 
     public void OnClickAceptar(View v){
@@ -36,11 +43,19 @@ public class RegistroActivity extends AppCompatActivity {
             String User=usuario.getText().toString();
             String Pass=contraseña.getText().toString();
             String Email=correo.getText().toString();
-            Intent i=getIntent();
-            i.putExtra("Usuario",User);
-            i.putExtra("Contraseña",Pass);
-            i.putExtra("Correo",Email);
-            setResult(RESULT_OK,i);
+
+            SharedPreferences.Editor editor = MisCarnes.edit();
+            editor.putString("Usuario", User);
+            editor.putString("Contraseña", Pass);
+            editor.putString("Correo", Email);
+            editor.commit();
+
+            //Intent i=getIntent();
+            //i.putExtra("Usuario",User);
+            //i.putExtra("Contraseña",Pass);
+            //i.putExtra("Correo",Email);
+            //setResult(RESULT_OK,i);
+            setResult(RESULT_OK);
             finish();
         }
 

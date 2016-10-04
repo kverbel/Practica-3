@@ -17,20 +17,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".LogginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".RegistroActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
+
+        <fragment
             android:name=".PerfilActivity"
-            android:label="Mi Perfil"></activity>
-        <activity
+            android:label="Mi Perfil" />
+        <fragment
+            android:name=".HamburguesasFragment"
+            android:label="Mi Perfil"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <fragment
             android:name=".ComidasActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <fragment android:name=".PromocionesActivity" />
+        <activity android:name=".DescripcionActivity"></activity>
     </application>
 
 </manifest>

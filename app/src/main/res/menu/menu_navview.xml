@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/option_principal"
+            android:icon="@drawable/ic_home"
+            android:title="Mis Carnes Parrilla"/>
+        <item
+            android:id="@+id/option_perfil"
+            android:icon="@drawable/ic_perfil"
+            android:title="Mi Perfil"/>
+        <item
+            android:id="@+id/option_comidas"
+            android:icon="@drawable/ic_comidas"
+            android:title="Comidas"/>
+        <item
+            android:id="@+id/option_promociones"
+            android:icon="@drawable/ic_promociones"
+            android:title="Promociones"/>
+        <item
+            android:id="@+id/option_salir"
+            android:icon="@drawable/ic_logout"
+            android:title="Cerrar Sesión"/>
+
+
+    </group>
+
+</menu>

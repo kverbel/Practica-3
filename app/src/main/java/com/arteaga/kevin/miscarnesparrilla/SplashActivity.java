@@ -1,6 +1,7 @@
 package com.arteaga.kevin.miscarnesparrilla;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final long SPLASH_DELAY = 3000;
+    private static final long SPLASH_DELAY = 1500;
+    SharedPreferences MisCarnes;
+    boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,17 +21,25 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
+        MisCarnes= getSharedPreferences("MisPreferencias",MODE_PRIVATE);
+        flag =  MisCarnes.getBoolean("FlagLoggin", false);
+
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
 
                 // Start the next activity
-                Intent intent = new Intent().setClass(SplashActivity.this, LogginActivity.class);
-                startActivity(intent);
+                if (flag){
+                    Intent intent = new Intent().setClass(SplashActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent().setClass(SplashActivity.this, LogginActivity.class);
+                    startActivity(intent);
+                }
 
-                // Close the activity so the user won't able to go back this
-                // activity pressing Back button
+                // Close the activity so the user won't able to go back this activity pressing Back button
                 finish();
             }
         };

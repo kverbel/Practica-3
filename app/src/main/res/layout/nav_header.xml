@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.arteaga.kevin.miscarnesparrilla.MainActivity"
+    android:orientation="vertical"
+    android:background="@drawable/header_rojo"
+    android:gravity="bottom">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="10dp"
+            android:text="@string/usuario"
+            android:textSize="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#ffffff"
+            android:id="@+id/hIdUser"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Usuario@correo.com"
+            android:textSize="12dp"
+            android:textColor="#ffffff"
+            android:id="@+id/hIdCorreo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+
+
+
+
+
+
+
+</LinearLayout>
