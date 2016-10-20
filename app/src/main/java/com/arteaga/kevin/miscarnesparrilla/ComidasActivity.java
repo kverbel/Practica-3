@@ -58,7 +58,7 @@ public class ComidasActivity extends Fragment {
 
     }
 
-/*
+/**
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {

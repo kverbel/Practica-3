@@ -1,9 +1,11 @@
 package com.arteaga.kevin.miscarnesparrilla;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,9 @@ public class RegistroActivity extends AppCompatActivity {
 
     EditText usuario,contraseña,contraseña2,correo;
     SharedPreferences MisCarnes;
+    UsuariosSQLiteHelper usuarios;
+    SQLiteDatabase dbUsuarios;
+    ContentValues dataDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,10 @@ public class RegistroActivity extends AppCompatActivity {
         contraseña=(EditText)findViewById(R.id.eContraseñaR);
         contraseña2=(EditText)findViewById(R.id.eContraseñaR2);
         correo=(EditText)findViewById(R.id.eCorreo);
+        usuarios = new UsuariosSQLiteHelper(this, "UsuariosBD", null, 1);
+        dbUsuarios = usuarios.getWritableDatabase();
+
+
 
 
 
@@ -44,12 +53,23 @@ public class RegistroActivity extends AppCompatActivity {
             String Pass=contraseña.getText().toString();
             String Email=correo.getText().toString();
 
-            SharedPreferences.Editor editor = MisCarnes.edit();
-            editor.putString("Usuario", User);
-            editor.putString("Contraseña", Pass);
-            editor.putString("Correo", Email);
-            editor.commit();
+            dataDB = new ContentValues();
 
+            dataDB.put("nombre",User);
+            dataDB.put("contraseña",Pass);
+            dataDB.put("correo", Email);
+
+            dbUsuarios.insert("Usuarios", null, dataDB);
+            //dbUsuarios.execSQL("INSERT INTO Usuarios VALUES(null,'"+User+"','"+Pass+"', '"+Email+"')");
+
+            //Acceso con shared preferences
+            //SharedPreferences.Editor editor = MisCarnes.edit();
+            //editor.putString("Usuario", User);
+            //editor.putString("Contraseña", Pass);
+            //editor.putString("Correo", Email);
+            //editor.commit();
+
+            //Acceso pasando intent entre actividades
             //Intent i=getIntent();
             //i.putExtra("Usuario",User);
             //i.putExtra("Contraseña",Pass);

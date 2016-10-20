@@ -9,8 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +32,17 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  */
 
-class TipicoAdapter extends RecyclerView.Adapter<TipicoAdapter.TipicoViewHolder> {
+class FavoritoAdapter extends RecyclerView.Adapter<FavoritoAdapter.FavoritoViewHolder> {
     private List<Producto> items;
 
-    public static class TipicoViewHolder extends RecyclerView.ViewHolder {
+    public static class FavoritoViewHolder extends RecyclerView.ViewHolder {
         // Campos respectivos de un item
         public ImageView imagen;
         public TextView nombre;
         public TextView precio;
         public TextView descripcion;
 
-        public TipicoViewHolder(View v) {
+        public FavoritoViewHolder(View v) {
             super(v);
             imagen = (ImageView) v.findViewById(R.id.imagenPr);
             nombre = (TextView) v.findViewById(R.id.nombrePr);
@@ -47,7 +51,7 @@ class TipicoAdapter extends RecyclerView.Adapter<TipicoAdapter.TipicoViewHolder>
         }
     }
 
-    public TipicoAdapter(List<Producto> items) {
+    public FavoritoAdapter(List<Producto> items) {
         this.items = items;
     }
 
@@ -59,14 +63,14 @@ class TipicoAdapter extends RecyclerView.Adapter<TipicoAdapter.TipicoViewHolder>
     public String getItemNombre(int i){return items.get(i).getNombre();}
 
     @Override
-    public TipicoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public FavoritoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.productos_card, viewGroup, false);
-        return new TipicoViewHolder(v);
+        return new FavoritoViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(TipicoViewHolder viewHolder, int i) {
+    public void onBindViewHolder(FavoritoViewHolder viewHolder, int i) {
         viewHolder.imagen.setImageResource(items.get(i).getImagen1());
         viewHolder.nombre.setText(items.get(i).getNombre());
         viewHolder.precio.setText(items.get(i).getPrecio());
@@ -74,7 +78,7 @@ class TipicoAdapter extends RecyclerView.Adapter<TipicoAdapter.TipicoViewHolder>
     }
 }
 
-public class TipicosFragment extends Fragment {
+public class FavoritosFragment extends Fragment {
 
     private RecyclerView recycler;
     private RecyclerView.Adapter adapter;
@@ -82,9 +86,12 @@ public class TipicosFragment extends Fragment {
     List<Producto> items;
     ProductosSQLiteHelper productos;
     SQLiteDatabase dbProductos;
+    FavoritosSQLiteHelper favoritos;
+    SQLiteDatabase dbFavoritos;
 
 
-    public TipicosFragment() {
+
+    public FavoritosFragment() {
         // Required empty public constructor
     }
 
@@ -92,24 +99,31 @@ public class TipicosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View inflated = inflater.inflate(R.layout.fragment_tipicos, container, false);
+        View inflated = inflater.inflate(R.layout.fragment_favoritos, container, false);
 
         productos = new ProductosSQLiteHelper(getContext(), "ProductosBD", null, 1);
         dbProductos = productos.getReadableDatabase();
+        favoritos = new FavoritosSQLiteHelper(getContext(), "FavoritosBD", null, 1);
+        dbFavoritos = favoritos.getWritableDatabase();
 
         items = new ArrayList();
-        //final Cursor c = dbProductos.rawQuery("select idProducto,imagen,nombre,descripcion,precio  from Productos", null);
-        final Cursor c = dbProductos.rawQuery("select * from Productos where idProducto like 'T%'", null);
 
-        if (c.moveToFirst()) {
-            //Recorremos el cursor hasta que no haya más registros
-            do {
-                items.add(new Producto(c.getString(0), c.getInt(1), c.getString(2), c.getString(3), c.getString(4)));
-            } while (c.moveToNext());
+        final Cursor c = dbFavoritos.rawQuery("select idFavorito,idUsuario,idProducto  from Favoritos", null);
+        if (c.moveToFirst()){
+            ArrayList<String> Ids = new ArrayList<String>();
+            do{
+                Ids.add(c.getString(2));
+            }while (c.moveToNext());
+            for(int i=0;i<Ids.size();i++) {
+                final Cursor c2 = dbProductos.rawQuery("select * from Productos where idProducto like '"+Ids.get(i)+"'", null);
+                if (c2.moveToFirst()) {
+                    items.add(new Producto(c2.getString(0), c2.getInt(1), c2.getString(2), c2.getString(3), c2.getString(4)));
+                }
+            }
         }
 
         // Obtener el Recycler
-        recycler = (RecyclerView) inflated.findViewById(R.id.recicladorTip);
+        recycler = (RecyclerView) inflated.findViewById(R.id.recicladorFav);
         recycler.setHasFixedSize(true);
 
         // Usar un administrador para LinearLayout
@@ -117,8 +131,10 @@ public class TipicosFragment extends Fragment {
         recycler.setLayoutManager(lManager);
 
         // Crear un nuevo adaptador
-        adapter = new TipicoAdapter(items);
+        adapter = new FavoritoAdapter(items);
         recycler.setAdapter(adapter);
+
+
 
 
         recycler.addOnItemTouchListener(new RecyclerTouchListener(this.getActivity(), recycler, new ClickListener() {
@@ -139,7 +155,8 @@ public class TipicosFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "Típico "+(position+1), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity().getApplicationContext(), "Favorito "+(position+1), Toast.LENGTH_SHORT).show();
             }
         }));
 
@@ -153,10 +170,10 @@ public class TipicosFragment extends Fragment {
 
     class RecyclerTouchListener implements RecyclerView.OnItemTouchListener{
 
-        private TipicosFragment.ClickListener clicklistener;
+        private FavoritosFragment.ClickListener clicklistener;
         private GestureDetector gestureDetector;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final TipicosFragment.ClickListener clicklistener){
+        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final FavoritosFragment.ClickListener clicklistener){
 
             this.clicklistener=clicklistener;
             gestureDetector=new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
@@ -195,4 +212,5 @@ public class TipicosFragment extends Fragment {
 
         }
     }
+
 }

@@ -1,9 +1,12 @@
 package com.arteaga.kevin.miscarnesparrilla;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +20,9 @@ public class LogginActivity extends AppCompatActivity {
     private final static int ObtenerDatos = 0;
     SharedPreferences MisCarnes;
     EditText usuario,contraseña ;
-    String User, Pass;
+    String User, Pass, Email;
+    UsuariosSQLiteHelper usuarios;
+    SQLiteDatabase dbUsuarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +35,28 @@ public class LogginActivity extends AppCompatActivity {
         MisCarnes= getSharedPreferences("MisPreferencias",MODE_PRIVATE);
         usuario = (EditText)findViewById(R.id.eUsuario);
         contraseña = (EditText)findViewById(R.id.eContraseña);
+        usuarios = new UsuariosSQLiteHelper(this, "UsuariosBD", null, 1);
+        dbUsuarios = usuarios.getReadableDatabase();
+        //User=usuario.getText().toString();
+
+
+        /*
         if (MisCarnes.contains("Usuario")& MisCarnes.contains("Contraseña")) {
             User=MisCarnes.getString("Usuario", "");
             Pass=MisCarnes.getString("Usuario", "");
-        }
+        }*/
     }
 
     public void OnClickIngresar(View v){
+
+        Cursor c = dbUsuarios.rawQuery("select * from Usuarios where nombre='"+usuario.getText().toString()+"'",null);
+
+        if (c.moveToFirst()){
+            User=c.getString(1);
+            Pass=c.getString(2);
+            Email=c.getString(3);
+        }
+
         if (!usuario.getText().toString().equals(User) || !contraseña.getText().toString().equals(Pass)){
             Toast.makeText(this,"Usuario/Contraseña Incorrectos", Toast.LENGTH_SHORT).show();
         }
@@ -44,6 +64,8 @@ public class LogginActivity extends AppCompatActivity {
             Intent intent = new Intent(v.getContext(),MainActivity.class);
             startActivity(intent);
             SharedPreferences.Editor editor = MisCarnes.edit();
+            editor.putString("Usuario", User);
+            editor.putString("Correo", Email);
             editor.putBoolean("FlagLoggin", true);
             editor.commit();
             finish();
@@ -62,8 +84,8 @@ public class LogginActivity extends AppCompatActivity {
         }
         else {
 
-            User = MisCarnes.getString("Usuario", "");
-            Pass = MisCarnes.getString("Contraseña", "");
+            //User = MisCarnes.getString("Usuario", "");
+            //Pass = MisCarnes.getString("Contraseña", "");
 
             //User = data.getExtras().getString("Usuario");
             //Pass = data.getExtras().getString("Contraseña");
