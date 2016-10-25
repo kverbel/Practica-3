@@ -21,6 +21,7 @@ public class LogginActivity extends AppCompatActivity {
     SharedPreferences MisCarnes;
     EditText usuario,contraseña ;
     String User, Pass, Email;
+    int Id;
     UsuariosSQLiteHelper usuarios;
     SQLiteDatabase dbUsuarios;
 
@@ -52,6 +53,7 @@ public class LogginActivity extends AppCompatActivity {
         Cursor c = dbUsuarios.rawQuery("select * from Usuarios where nombre='"+usuario.getText().toString()+"'",null);
 
         if (c.moveToFirst()){
+            Id=c.getInt(0);
             User=c.getString(1);
             Pass=c.getString(2);
             Email=c.getString(3);
@@ -64,6 +66,7 @@ public class LogginActivity extends AppCompatActivity {
             Intent intent = new Intent(v.getContext(),MainActivity.class);
             startActivity(intent);
             SharedPreferences.Editor editor = MisCarnes.edit();
+            editor.putInt("IdUsuario",Id);
             editor.putString("Usuario", User);
             editor.putString("Correo", Email);
             editor.putBoolean("FlagLoggin", true);

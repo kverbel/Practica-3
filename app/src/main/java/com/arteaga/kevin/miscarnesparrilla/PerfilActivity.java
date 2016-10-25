@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 public class PerfilActivity extends Fragment {
 
+    DrawerLayout drawerLayout;
     TabLayout tabLayout;
     ViewPager viewPager;
 
@@ -36,6 +38,11 @@ public class PerfilActivity extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View inflated =inflater.inflate(R.layout.activity_perfil, container, false);
+        drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Mi Perfil");
+
         tabLayout = (TabLayout) inflated.findViewById(R.id.tabsPerfil);
         viewPager = (ViewPager) inflated.findViewById(R.id.pagerPerfil);
 

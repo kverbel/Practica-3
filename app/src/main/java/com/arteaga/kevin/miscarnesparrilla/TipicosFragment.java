@@ -3,6 +3,7 @@ package com.arteaga.kevin.miscarnesparrilla;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ public class TipicosFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager lManager;
     List<Producto> items;
+    SharedPreferences MisCarnes;
     ProductosSQLiteHelper productos;
     SQLiteDatabase dbProductos;
 
@@ -94,6 +96,7 @@ public class TipicosFragment extends Fragment {
         // Inflate the layout for this fragment
         View inflated = inflater.inflate(R.layout.fragment_tipicos, container, false);
 
+        MisCarnes = this.getActivity().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
         productos = new ProductosSQLiteHelper(getContext(), "ProductosBD", null, 1);
         dbProductos = productos.getReadableDatabase();
 
@@ -128,9 +131,18 @@ public class TipicosFragment extends Fragment {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent().setClass(getActivity().getApplicationContext(), DesProductoActivity.class);
+                        /*Intent intent = new Intent().setClass(getActivity().getApplicationContext(), DesProductoActivity.class);
                         intent.putExtra("idProducto",items.get(position).getIdProducto());
-                        startActivity(intent);
+                        startActivity(intent);*/
+
+                        SharedPreferences.Editor editor = MisCarnes.edit();
+                        editor.putString("idProducto",items.get(position).getIdProducto());
+                        editor.commit();
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.framePrincipal, new DesProductoActivity())
+                                .addToBackStack(null)   //addToBackStack Para regresar entre Fragments
+                                .commit();
                     }
                 };
                 Timer timer = new Timer();

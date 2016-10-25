@@ -31,14 +31,13 @@
         <fragment
             android:name=".HamburguesasFragment"
             android:label="Mi Perfil"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            />
         <fragment
             android:name=".ComidasActivity"
             android:parentActivityName=".MainActivity" />
         <fragment android:name=".PromocionesActivity" />
 
         <activity android:name=".DescripcionActivity" />
-        <activity android:name=".DesProductoActivity"></activity>
     </application>
 
 </manifest>

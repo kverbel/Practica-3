@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class ComidasActivity extends Fragment {
     //ActionBar actionBar;
     //ActionBar.Tab tab;
 
+    DrawerLayout drawerLayout;
     TabLayout tabLayout;
     ViewPager viewPager;
 
@@ -37,6 +39,11 @@ public class ComidasActivity extends Fragment {
          *Inflate tab_layout and setup Views.
          */
         View inflated =  inflater.inflate(R.layout.activity_comidas,container, false);
+        drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Comidas");
+
         tabLayout = (TabLayout) inflated.findViewById(R.id.tabs);
         viewPager = (ViewPager) inflated.findViewById(R.id.pager);
 

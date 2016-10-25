@@ -1,10 +1,13 @@
 package com.arteaga.kevin.miscarnesparrilla;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences MisCarnes;
     TextView UserHeader, CorreoHeader;
     View Header;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,15 +121,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Regresar entre fragments
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 
-
-    // Menu Overflow
+    /* Menu Overflow
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -150,6 +161,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
 }

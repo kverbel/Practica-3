@@ -3,10 +3,12 @@ package com.arteaga.kevin.miscarnesparrilla;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -83,6 +85,7 @@ public class FavoritosFragment extends Fragment {
     private RecyclerView recycler;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager lManager;
+    SharedPreferences MisCarnes;
     List<Producto> items;
     ProductosSQLiteHelper productos;
     SQLiteDatabase dbProductos;
@@ -101,6 +104,7 @@ public class FavoritosFragment extends Fragment {
         // Inflate the layout for this fragment
         View inflated = inflater.inflate(R.layout.fragment_favoritos, container, false);
 
+        MisCarnes = this.getActivity().getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
         productos = new ProductosSQLiteHelper(getContext(), "ProductosBD", null, 1);
         dbProductos = productos.getReadableDatabase();
         favoritos = new FavoritosSQLiteHelper(getContext(), "FavoritosBD", null, 1);
@@ -108,12 +112,13 @@ public class FavoritosFragment extends Fragment {
 
         items = new ArrayList();
 
-        final Cursor c = dbFavoritos.rawQuery("select idFavorito,idUsuario,idProducto  from Favoritos", null);
-        if (c.moveToFirst()){
+
+        final Cursor c1 = dbFavoritos.rawQuery("select * from Favoritos where idUsuario='"+MisCarnes.getInt("IdUsuario",0 )+"'", null);
+        if (c1.moveToFirst()){
             ArrayList<String> Ids = new ArrayList<String>();
             do{
-                Ids.add(c.getString(2));
-            }while (c.moveToNext());
+                Ids.add(c1.getString(2));
+            }while (c1.moveToNext());
             for(int i=0;i<Ids.size();i++) {
                 final Cursor c2 = dbProductos.rawQuery("select * from Productos where idProducto like '"+Ids.get(i)+"'", null);
                 if (c2.moveToFirst()) {
@@ -144,9 +149,20 @@ public class FavoritosFragment extends Fragment {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
+                        /*
                         Intent intent = new Intent().setClass(getActivity().getApplicationContext(), DesProductoActivity.class);
                         intent.putExtra("idProducto",items.get(position).getIdProducto());
                         startActivity(intent);
+                        //getActivity().finish();
+                        */
+                        SharedPreferences.Editor editor = MisCarnes.edit();
+                        editor.putString("idProducto",items.get(position).getIdProducto());
+                        editor.commit();
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.framePrincipal, new DesProductoActivity())
+                                .addToBackStack(null)   //addToBackStack Para regresar entre Fragments
+                                .commit();
                     }
                 };
                 Timer timer = new Timer();
